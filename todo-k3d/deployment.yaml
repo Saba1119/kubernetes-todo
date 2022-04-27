@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: todoapp
+  labels: 
+    app: todo
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+      - name: todo
+        image: saba1119/todo:v3
+        #image: vdocker0123/todo:HPA01
+
+      
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: todo-configmap
+              key: db-host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: todo-configmap
+              key: db-port
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: todo-configmap
+              key: db-name
+
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: todo-secret
+              key: db-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: todo-secret
+              key: db-password      
+
+        resources:
+          limits:
+            cpu: 2048m
+          requests:
+            cpu: 100m
+        ports:
+        - containerPort: 8080 
+
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /task
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30   
+
+        readinessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /task
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30
+
+        volumeMounts:
+        - name: todovolume
+          mountPath: "/data"
+          readOnly: true   
+      volumes:  
+        - name: todovolume
+          secret: 
+            secretName: todo-secret 
+      # imagePullSecrets:
+      #   - name: docregcred

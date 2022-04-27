@@ -1,0 +1,10 @@
+apiVersion: v1 
+kind: ConfigMap
+metadata:
+  name: todo-configmap
+  labels:
+    app: todo
+data:
+  db-host: postgres-service
+  db-port: "5432"
+  db-name: invisibl_todo
