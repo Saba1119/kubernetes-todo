@@ -58,25 +58,25 @@ spec:
         ports:
         - containerPort: 8080 
 
-        livenessProbe:
-          failureThreshold: 2
-          httpGet:
-            path: /task
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 30   
+#         livenessProbe:
+#           failureThreshold: 2
+#           httpGet:
+#             path: /task
+#             port: 8080
+#           initialDelaySeconds: 10
+#           periodSeconds: 30
+#           successThreshold: 1
+#           timeoutSeconds: 30   
 
-        readinessProbe:
-          failureThreshold: 2
-          httpGet:
-            path: /task
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 30
+#         readinessProbe:
+#           failureThreshold: 2
+#           httpGet:
+#             path: /task
+#             port: 8080
+#           initialDelaySeconds: 10
+#           periodSeconds: 30
+#           successThreshold: 1
+#           timeoutSeconds: 30
 
         volumeMounts:
         - name: todovolume
